@@ -44,7 +44,7 @@ const Login = asyncHandler( async (req, res) => {
 });
 
 const Register = asyncHandler( async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, phone, password } = req.body;
     if(!username || !email || !password){
         res.status(403);
         throw new Error("All Fields are mandatory");
@@ -58,6 +58,11 @@ const Register = asyncHandler( async (req, res) => {
     if(existsWithName.length !== 0){
         res.status(403);
         throw new Error("User Name already Exists");
+    }
+    const existsWithPhone = await UserModel.find({ phone });
+    if(existsWithPhone.length !== 0){
+        res.status(403);
+        throw new Error("User Phone No. already Exists");
     }
     const hashedPass = await bcrypt.hash(password, 10);
     const user = await UserModel.create({
