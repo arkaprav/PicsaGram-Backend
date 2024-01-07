@@ -148,6 +148,11 @@ const getProfilePic = asyncHandler( async (req, res) => {
     });
 });
 
+const getCurrentUser = asyncHandler( async (req, res) => {
+    const user = await UserModel.findOne({ _id: req.user.id });
+    res.status(200).json(user);
+})
+
 const updateFollower = asyncHandler( async (req, res) => {
     const user = await UserModel.findById(req.user.id);
     if(!user) {
@@ -203,4 +208,4 @@ const deleteFollower = asyncHandler( async (req, res) => {
     res.status(200).json(updatedUser);
 });
 
-module.exports = { Login, Register, getAllUsers, getSingleUser, updateSingleUser, DeleteSingleUser, updateProfilePic, getProfilePic, updateFollower, deleteFollower };
+module.exports = { Login, Register, getAllUsers, getSingleUser, updateSingleUser, DeleteSingleUser, updateProfilePic, getProfilePic, updateFollower, deleteFollower, getCurrentUser };
