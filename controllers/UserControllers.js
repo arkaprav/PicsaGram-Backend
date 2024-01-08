@@ -148,11 +148,12 @@ const getProfilePic = asyncHandler( async (req, res) => {
             }
         });
     }
-    res.sendFile(profilePicPath, options, function (err) {
+    const absPath = "/" + profilePicPath.split("\\")[0] + "/" + profilePicPath.split("\\")[1];
+    res.sendFile(absPath, options, function (err) {
         if (err) {
             console.log(err);
         } else {
-            console.log('Sent:', profilePicPath);
+            console.log('Sent:', absPath);
         }
     });
 });
