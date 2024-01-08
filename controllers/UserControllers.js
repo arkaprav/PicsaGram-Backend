@@ -139,6 +139,15 @@ const getProfilePic = asyncHandler( async (req, res) => {
         throw new Error("User Not Found");
     }
     const profilePicPath = user.profilePic;
+    if(profilePicPath === "") {
+        res.sendFile("/profilePics/default.jpeg", options, function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('Sent:', profilePicPath);
+            }
+        });
+    }
     res.sendFile(profilePicPath, options, function (err) {
         if (err) {
             console.log(err);
