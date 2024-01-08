@@ -31,7 +31,7 @@ app.use("static",express.static(path.join(__dirname, "profilePics")));
 app.use("/api/test/", testRoutes);
 app.use("/api/users/auth/", authRoutes);
 app.use("/api/users/", UserOpenRoutes);
-app.use("/api/users/update", UserSecureRoutes);
+app.use("/api/users/secure", UserSecureRoutes);
 app.use(errorHandler);
 
 module.exports = app;
