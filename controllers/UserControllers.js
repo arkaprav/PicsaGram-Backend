@@ -93,27 +93,14 @@ const updateSingleUser = asyncHandler( async (req, res) => {
     let hashedPass = user.password;
     if(password){
         hashedPass = await bcrypt.hash(password, 10);
+    }let profilePic = user.profilePic;
+    if(req.file){
+        profilePic = 'data:image/png;base64,' +  req.file.buffer.toString("base64url");
     }
     req.body = {
         ...req.body,
         password: hashedPass,
-    };
-    const updatedUser = await UserModel.findByIdAndUpdate( req.user.id, req.body );
-    res.status(200).json(updatedUser);
-});
-
-const updateProfilePic = asyncHandler(async (req, res) => {
-    const user = await UserModel.findById(req.user.id);
-    if(!user) {
-        res.status(404);
-        throw new Error("User Not Found");
-    }
-    let profilePic = "";
-    if(req.file){
-        profilePic = req.file.path;
-    }
-    req.body = {
-        profilePic
+        profilePic,
     };
     const updatedUser = await UserModel.findByIdAndUpdate( req.user.id, req.body );
     res.status(200).json(updatedUser);
@@ -127,35 +114,6 @@ const DeleteSingleUser = asyncHandler( async (req, res) => {
     }
     const deletedUser = await UserModel.findByIdAndDelete(req.user.id);
     res.status(200).json(deletedUser);
-});
-
-const getProfilePic = asyncHandler( async (req, res) => {
-    const user = await UserModel.findById(req.params.id);
-    const options = {
-        root: path.join(__dirname,"../")
-    };
-    if(!user) {
-        res.status(404);
-        throw new Error("User Not Found");
-    }
-    const profilePicPath = user.profilePic;
-    if(profilePicPath === "") {
-        res.sendFile("/profilePics/default.jpeg", options, function (err) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log('Sent:', profilePicPath);
-            }
-        });
-    }
-    const absPath = "/" + profilePicPath.split("\\")[0] + "/" + profilePicPath.split("\\")[1];
-    res.sendFile(absPath, options, function (err) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('Sent:', absPath);
-        }
-    });
 });
 
 const getCurrentUser = asyncHandler( async (req, res) => {
@@ -218,4 +176,4 @@ const deleteFollower = asyncHandler( async (req, res) => {
     res.status(200).json(updatedUser);
 });
 
-module.exports = { Login, Register, getAllUsers, getSingleUser, updateSingleUser, DeleteSingleUser, updateProfilePic, getProfilePic, updateFollower, deleteFollower, getCurrentUser };
+module.exports = { Login, Register, getAllUsers, getSingleUser, updateSingleUser, DeleteSingleUser, updateFollower, deleteFollower, getCurrentUser };

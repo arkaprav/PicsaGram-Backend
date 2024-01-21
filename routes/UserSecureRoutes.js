@@ -1,22 +1,15 @@
 const express = require("express");
 const validateUser = require("../middlewares/validateUser");
-const { updateSingleUser, DeleteSingleUser, updateProfilePic, getProfilePic, updateFollower, deleteFollower, getCurrentUser } = require("../controllers/UserControllers");
+const { updateSingleUser, DeleteSingleUser, updateFollower, deleteFollower, getCurrentUser } = require("../controllers/UserControllers");
 const router = express.Router();
 const multer = require("multer");
-
-const storage = multer.diskStorage({
-  destination: './profilePics',
-  filename: (req, file, cb) => {
-    cb(null, `${file.fieldname}-${Date.now()}.jpeg`);
-  },
+const upload = multer({
+  storage: multer.memoryStorage(),
 });
-
-const upload = multer({ storage });
 
 router.use(validateUser);
 router.use(upload.single("profile_pic"));
 router.route("/").put(updateSingleUser).delete(DeleteSingleUser);
-router.route("/profile_pic").put(updateProfilePic);
 router.route("/follow/:id").put(updateFollower).delete(deleteFollower);
 router.route("/current").get(getCurrentUser);
 
