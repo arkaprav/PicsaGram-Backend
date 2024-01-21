@@ -2,11 +2,13 @@ const asyncHandler = require("express-async-handler");
 
 const UserModel = require("../models/UserModel");
 
+const PostsModel = require("../models/PostsModel");
+
+const CommentsModel = require("../models/CommentsModel");
+
 const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
-
-const path = require("path");
 
 const Login = asyncHandler( async (req, res) => {
     const { name, password } = req.body;
@@ -103,7 +105,7 @@ const updateSingleUser = asyncHandler( async (req, res) => {
         profilePic,
     };
     const updatedUser = await UserModel.findByIdAndUpdate( req.user.id, req.body );
-    res.status(200).json(updatedUser);
+    res.status(200).json({ message: "User Updated" });
 });
 
 const DeleteSingleUser = asyncHandler( async (req, res) => {
@@ -113,7 +115,9 @@ const DeleteSingleUser = asyncHandler( async (req, res) => {
         throw new Error("User Not Found");
     }
     const deletedUser = await UserModel.findByIdAndDelete(req.user.id);
-    res.status(200).json(deletedUser);
+    const deleteComments = await CommentsModel.findAndDelete({ commentedBy: req.user.id });
+    const deletePosts = await PostsModel.findAndDelete({ createdBy: req.user.id });
+    res.status(200).json({ message: "User Deleted!"});
 });
 
 const getCurrentUser = asyncHandler( async (req, res) => {

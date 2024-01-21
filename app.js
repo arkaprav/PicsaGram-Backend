@@ -4,11 +4,13 @@ const cors = require("cors");
 const app = express();
 const connectDB = require("./config/dbConfig");
 const errorHandler = require("./middlewares/errorHandler");
-const testRoutes = require("./routes/testRoutes");
 const authRoutes = require("./routes/AuthRoutes");
-const UserOpenRoutes = require("./routes/UserRoutes");
+const UserOpenRoutes = require("./routes/UsersRoutes");
 const UserSecureRoutes = require("./routes/UserSecureRoutes");
-const path = require('path');
+const PostsRoutes = require("./routes/PostsRoutes");
+const PostsSecureRoutes = require("./routes/PostsSecureRoutes");
+const CommentsRoutes = require("./routes/CommentsRoutes");
+const CommentsSecureRoutes = require("./routes/CommentsSecureRoutes");
 
 connectDB();
 
@@ -27,11 +29,13 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use("static",express.static(path.join(__dirname, "profilePics")));
-app.use("/api/test/", testRoutes);
 app.use("/api/users/auth/", authRoutes);
 app.use("/api/users/", UserOpenRoutes);
 app.use("/api/users/secure", UserSecureRoutes);
+app.use("/api/posts/", PostsRoutes);
+app.use("/api/posts/secure/", PostsSecureRoutes);
+app.use("/api/comments/", CommentsRoutes);
+app.use("/api/comments/secure/", CommentsSecureRoutes);
 app.use(errorHandler);
 
 module.exports = app;
