@@ -39,7 +39,12 @@ const Login = asyncHandler( async (req, res) => {
             process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: "7d" }
             );
-            res.status(200).json(accessToken);
+            const data = {
+                jwt: accessToken,
+                username: user.username,
+                profilePic: user.profilePic
+            }
+            res.status(200).json(data);
         }
         else{
             res.status(404);
