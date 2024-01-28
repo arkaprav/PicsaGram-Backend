@@ -56,23 +56,25 @@ const Login = asyncHandler( async (req, res) => {
 
 const Register = asyncHandler( async (req, res) => {
     const { username, email, phone, password } = req.body;
-    console.log({ username, email, phone, password });
     if(!username || !email || !phone || !password){
         res.status(403);
         throw new Error("All Fields are mandatory");
     }
     const existsWithEmail = await UserModel.findOne({ email });
-    if(!existsWithEmail){
+    console.log(existsWithEmail);
+    if(existsWithEmail !== null){
         res.status(403);
         throw new Error("User Email already Exists");
     }
     const existsWithName = await UserModel.findOne({ username });
-    if(!existsWithName){
+    console.log(existsWithName);
+    if(existsWithName !== null){
         res.status(403);
         throw new Error("User Name already Exists");
     }
     const existsWithPhone = await UserModel.findOne({ phone: parseInt(phone) });
-    if(!existsWithPhone){
+    console.log(existsWithPhone);
+    if(existsWithPhone !== null){
         res.status(403);
         throw new Error("User Phone No. already Exists");
     }
