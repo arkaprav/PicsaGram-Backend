@@ -21,8 +21,17 @@ const Login = asyncHandler( async (req, res) => {
         user = await UserModel.findOne({ username: name });
     }
     if(!user){
+        try{
+            user = await UserModel.findOne({ phone: parseInt(phone) });
+        }
+        catch(err){
+            res.status(404);
+            throw new Error("Invalid username or email or phone");
+        }
+    }
+    if(!user){
         res.status(404);
-        throw new Error("Invalid username or email");
+        throw new Error("Invalid username or email or phone");
     }
     else{
         const comparePass = await bcrypt.compare(password, user.password);
@@ -47,22 +56,23 @@ const Login = asyncHandler( async (req, res) => {
 
 const Register = asyncHandler( async (req, res) => {
     const { username, email, phone, password } = req.body;
-    if(!username || !email || !password){
+    console.log({ username, email, phone, password });
+    if(!username || !email || !phone || !password){
         res.status(403);
         throw new Error("All Fields are mandatory");
     }
-    const existsWithEmail = await UserModel.find({ email });
-    if(existsWithEmail.length !== 0){
+    const existsWithEmail = await UserModel.findOne({ email });
+    if(!existsWithEmail){
         res.status(403);
         throw new Error("User Email already Exists");
     }
-    const existsWithName = await UserModel.find({ username });
-    if(existsWithName.length !== 0){
+    const existsWithName = await UserModel.findOne({ username });
+    if(!existsWithName){
         res.status(403);
         throw new Error("User Name already Exists");
     }
-    const existsWithPhone = await UserModel.find({ phone });
-    if(existsWithPhone.length !== 0){
+    const existsWithPhone = await UserModel.findOne({ phone: parseInt(phone) });
+    if(!existsWithPhone){
         res.status(403);
         throw new Error("User Phone No. already Exists");
     }
@@ -70,7 +80,8 @@ const Register = asyncHandler( async (req, res) => {
     const user = await UserModel.create({
         username,
         email,
-        password: hashedPass
+        password: hashedPass,
+        phone: parseInt(phone)
     });
     res.status(201).json(user);
 });
@@ -95,7 +106,8 @@ const updateSingleUser = asyncHandler( async (req, res) => {
     let hashedPass = user.password;
     if(password){
         hashedPass = await bcrypt.hash(password, 10);
-    }let profilePic = user.profilePic;
+    }
+    let profilePic = user.profilePic;
     if(req.file){
         profilePic = 'data:image/png;base64,' +  req.file.buffer.toString("base64url");
     }
