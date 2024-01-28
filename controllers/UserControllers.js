@@ -18,16 +18,10 @@ const Login = asyncHandler( async (req, res) => {
     }
     let user = await UserModel.findOne({ email: name });
     if(!user){
-        user = await UserModel.findOne({ username: name });
+        user = await UserModel.findOne({ username: name }); 
     }
     if(!user){
-        try{
-            user = await UserModel.findOne({ phone: parseInt(phone) });
-        }
-        catch(err){
-            res.status(404);
-            throw new Error("Invalid username or email or phone");
-        }
+        user = await UserModel.findOne({ phone: parseInt(name) });
     }
     if(!user){
         res.status(404);
@@ -61,20 +55,17 @@ const Register = asyncHandler( async (req, res) => {
         throw new Error("All Fields are mandatory");
     }
     const existsWithEmail = await UserModel.findOne({ email });
-    console.log(existsWithEmail);
-    if(existsWithEmail !== null){
+    if(existsWithEmail){
         res.status(403);
         throw new Error("User Email already Exists");
     }
     const existsWithName = await UserModel.findOne({ username });
-    console.log(existsWithName);
-    if(existsWithName !== null){
+    if(existsWithName){
         res.status(403);
         throw new Error("User Name already Exists");
     }
     const existsWithPhone = await UserModel.findOne({ phone: parseInt(phone) });
-    console.log(existsWithPhone);
-    if(existsWithPhone !== null){
+    if(existsWithPhone){
         res.status(403);
         throw new Error("User Phone No. already Exists");
     }
