@@ -14,7 +14,7 @@ const createPosts = asyncHandler(async (req, res) => {
         throw new Error("Can't create a post without an image!");
     }
     else{
-        image = 'data:image/png;base64,' +  req.file.buffer.toString("base64url");
+        image = 'data:image/png;base64,' +  req.file.buffer.toString("base64");
     }
     if(!caption){
         res.status(401);

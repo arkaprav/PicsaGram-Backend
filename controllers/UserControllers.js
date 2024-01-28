@@ -107,7 +107,7 @@ const updateSingleUser = asyncHandler( async (req, res) => {
     }
     let profilePic = user.profilePic;
     if(req.file){
-        profilePic = 'data:image/png;base64,' +  req.file.buffer.toString("base64url");
+        profilePic = 'data:image/png;base64,' +  req.file.buffer.toString("base64");
     }
     req.body = {
         ...req.body,
