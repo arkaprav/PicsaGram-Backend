@@ -25,10 +25,6 @@ const UserModel = mongoose.Schema({
         type: String,
         default: ""
     },
-    no_of_posts: {
-        type: String,
-        default: "[]"
-    },
     follower: {
         type: String,
         default: "[]"

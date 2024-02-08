@@ -41,8 +41,7 @@ const Login = asyncHandler( async (req, res) => {
             );
             const data = {
                 jwt: accessToken,
-                username: user.username,
-                profilePic: user.profilePic
+                id: user._id,
             }
             res.status(200).json(data);
         }
@@ -154,9 +153,9 @@ const updateFollower = asyncHandler( async (req, res) => {
     const followerData = {
         following: JSON.stringify([ following._id, ...followings ]),
     }
-    const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, followerData);
     const updatedFollowing = await UserModel.findByIdAndUpdate(req.params.id, followingData);
-    res.status(200).json(updatedUser);
+    const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, followerData);
+    res.status(200).json({ message: "Follower updated"});
 });
 
 const deleteFollower = asyncHandler( async (req, res) => {
@@ -185,9 +184,9 @@ const deleteFollower = asyncHandler( async (req, res) => {
     const followerData = {
         following: updatedFollowings,
     }
-    const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, followerData);
     const updatedFollowing = await UserModel.findByIdAndUpdate(req.params.id, followingData);
-    res.status(200).json(updatedUser);
+    const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, followerData);
+    res.status(200).json({ message: "follower deleted" });
 });
 
 module.exports = { Login, Register, getAllUsers, getSingleUser, updateSingleUser, DeleteSingleUser, updateFollower, deleteFollower, getCurrentUser };
