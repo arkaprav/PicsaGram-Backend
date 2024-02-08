@@ -7,6 +7,11 @@ const CommentsModel = require("../models/CommentsModel");
 const UserModel = require("../models/UserModel");
 
 const createPosts = asyncHandler(async (req, res) => {
+    const user = await UserModel.findById(req.user.id);
+    if(!user){
+        res.status(401);
+        throw new Error("user not authorized");
+    }
     const { caption } = req.body;
     let image = "";
     if(!req.file){
@@ -25,6 +30,10 @@ const createPosts = asyncHandler(async (req, res) => {
         createdBy: req.user.id,
         caption
     });
+    const data = {
+        no_of_posts: JSON.stringify([...JSON.parse(user.no_of_posts), post._id]),
+    }
+    const updateUser = await UserModel.findById(req.user.id, data);
     res.status(201).json(post);
 });
 
@@ -90,12 +99,23 @@ const getUserPosts = asyncHandler(async (req, res) => {
 });
 
 const deletePost = asyncHandler(async (req, res) => {
+    const user = await UserModel.findById(req.user.id);
+    if(!user){
+        res.status(401);
+        throw new Error("User Not Authorized");
+    }
     const post = await PostsModel.findById(req.params.id);
     if(!post) {
         res.status(404);
         throw new Error("Post Not Found!");
     }
     const deletedPost = await PostsModel.findByIdAndDelete(req.params.id);
+    const data = {
+        no_of_posts: JSON.stringify(JSON.parse(user.no_of_posts).filter((p) => {
+            return p._id !== req.params.id;
+        })),
+    };
+    const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, data);
     const comments =  await CommentsModel.find({ postId: req.params.id });
     if(comments.length !== 0){
         const deletedPostComments = await CommentsModel.findAndDelete({ postId: req.params.id });

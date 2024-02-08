@@ -50,22 +50,20 @@ const updateComment = asyncHandler(async (req, res) => {
 });
 
 const updateCommentLikes = asyncHandler(async (req, res) => {
+    const user = await UserModel.findById(req.user.id);
+    if(!user){
+        res.status(401);
+        throw new Error("USer Not Authorized");
+    }
     const comment = await CommentsModel.findById(req.params.id);
     if(!comment){
         res.status(404);
         throw new Error("Comment not Found");
     }
-    const { likedById } = req.body;
     const { likes } = comment;
-    let data = {};
-    if(likedById){
-        const likedUser = await UserModel.findById(likedById);
-        if(!likedUser){
-            res.status(404);
-            throw new Error("User Liked Not Found!");
-        }
-        data.likes = JSON.stringify([...JSON.parse(likes), likedById]);
-    }
+    let data = {
+        likes: JSON.stringify([...JSON.parse(likes), req.user.id ]),
+    };
     const updatedComment = await CommentsModel.findByIdAndUpdate(req.params.id, data);
     res.status(200).json({ message: "Post Updated" });
 });
