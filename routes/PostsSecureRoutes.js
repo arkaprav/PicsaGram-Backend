@@ -1,6 +1,6 @@
 const express = require("express");
 const validateUser = require("../middlewares/validateUser");
-const { createPosts, updatePost, deletePost } = require("../controllers/PostsController");
+const { createPosts, updatePost, deletePost, updatePostLikes } = require("../controllers/PostsController");
 const router = express.Router();
 const multer = require("multer");
 const upload = multer({
