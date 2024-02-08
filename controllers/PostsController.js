@@ -36,7 +36,7 @@ const updatePost = asyncHandler(async (req, res) => {
     }
     let image = post.image;
     if(req.file){
-        image = 'data:image/png;base64,' +  req.file.buffer.toString("base64url");
+        image = 'data:image/png;base64,' +  req.file.buffer.toString("base64");
     }
     data = {
         ...req.body,
