@@ -52,20 +52,14 @@ const updatePostLikes = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("Post not Found");
     }
-    const { likedById } = req.body;
-    const { likes } = post;
-    let data = {};
-    if(likedById){
-        const likedUser = await UserModel.findById(likedById);
-        if(!likedUser){
-            res.status(404);
-            throw new Error("User Liked Not Found!");
-        }
-        data.likes = JSON.stringify([...JSON.parse(likes), likedById]);
+    const user = await UserModel.findById(req.user.id);
+    if(!user){
+        res.status(401);
+        throw new Error("User not Authorized");
     }
-    else{
-        res.status(404);
-        throw new Error("User Not Found!");
+    const { likes } = post;
+    let data = {
+        likes: JSON.stringify([...JSON.parse(likes), req.user.id]),
     }
     const updatedPost = await PostsModel.findByIdAndUpdate(req.params.id, data);
     res.status(200).json({ message: "Post Updated" });

@@ -11,5 +11,6 @@ router.use(validateUser);
 router.use(upload.single("post_image"));
 router.route("/").post(createPosts);
 router.route("/:id").put(updatePost).delete(deletePost);
+router.route("/likes/:id").put(updatePostLikes);
 
 module.exports = router;
