@@ -66,8 +66,9 @@ const updatePostLikes = asyncHandler(async (req, res) => {
     const d = JSON.parse(likes);
     let data;
     if(d.includes(req.user.id)){
-        const index = d.indexOf(req.user.id);
-        const newD = d.splice(index, 1);
+        const newD = d.filter((el) => {
+            return el !== req.user.id;
+        });
         data = {
             likes: JSON.stringify(newD),
         }
