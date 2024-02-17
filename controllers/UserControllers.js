@@ -202,9 +202,9 @@ const UpdateSavedPosts = asyncHandler(async (req, res) => {
     }
     const sp = JSON.parse(user.saved_posts);
     let data;
-    if(sp.includes(post._id)){
+    if(sp.includes(req.params.id)){
         const newD = sp.filter((p) => {
-            return p !== post._id;
+            return p !== req.params.id;
         });
         data = {
             saved_posts: JSON.stringify(newD)
@@ -212,7 +212,7 @@ const UpdateSavedPosts = asyncHandler(async (req, res) => {
     }
     else {
         data = {
-            saved_post: JSON.stringify([...sp, post._id])
+            saved_posts: JSON.stringify([...sp, req.params.id])
         }
     }
     const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, data);
