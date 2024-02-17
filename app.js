@@ -2,6 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const app = express();
+const compress = require("compression");
 const connectDB = require("./config/dbConfig");
 const errorHandler = require("./middlewares/errorHandler");
 const authRoutes = require("./routes/AuthRoutes");
@@ -28,6 +29,7 @@ app.use(cors({
   }
 }));
 
+app.use(compress());
 app.use(express.json());
 app.use("/api/users/auth/", authRoutes);
 app.use("/api/users/", UserOpenRoutes);
