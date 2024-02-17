@@ -74,7 +74,7 @@ const updatePostLikes = asyncHandler(async (req, res) => {
     }
     else {
         data = {
-            likes: JSON.stringify([...JSON.parse(likes), req.user.id]),
+            likes: JSON.stringify([...d, req.user.id]),
         }
     }
     const updatedPost = await PostsModel.findByIdAndUpdate(req.params.id, data);
