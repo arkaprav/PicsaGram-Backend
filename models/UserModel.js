@@ -32,6 +32,10 @@ const UserModel = mongoose.Schema({
     following: {
         type: String,
         default: "[]"
+    },
+    saved_posts: {
+        type: String,
+        default: "[]"
     }
 },
 {
