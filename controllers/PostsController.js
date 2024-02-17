@@ -63,8 +63,19 @@ const updatePostLikes = asyncHandler(async (req, res) => {
         throw new Error("User not Authorized");
     }
     const { likes } = post;
-    let data = {
-        likes: JSON.stringify([...JSON.parse(likes), req.user.id]),
+    const d = JSON.parse(likes);
+    let data;
+    if(d.includes(req.user.id)){
+        const index = d.indexOf(req.user.id);
+        const newD = d.splice(index, 1);
+        data = {
+            likes: JSON.stringify(newD),
+        }
+    }
+    else {
+        data = {
+            likes: JSON.stringify([...JSON.parse(likes), req.user.id]),
+        }
     }
     const updatedPost = await PostsModel.findByIdAndUpdate(req.params.id, data);
     res.status(200).json({ message: "Post Updated" });
