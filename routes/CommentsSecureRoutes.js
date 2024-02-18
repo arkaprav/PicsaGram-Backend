@@ -1,6 +1,6 @@
 const express = require("express");
 const validateUser = require("../middlewares/validateUser");
-const { createComment, updateComment, deleteComment } = require("../controllers/CommentsControllers");
+const { createComment, updateComment, deleteComment, updateCommentLikes } = require("../controllers/CommentsControllers");
 const router = express.Router();
 
 router.use(validateUser);
