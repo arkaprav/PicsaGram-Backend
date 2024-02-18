@@ -6,5 +6,6 @@ const router = express.Router();
 router.use(validateUser);
 router.route("/").post(createComment);
 router.route("/:id").put(updateComment).delete(deleteComment);
+router.route("/likes/:id").put(updateCommentLikes);
 
 module.exports = router;
