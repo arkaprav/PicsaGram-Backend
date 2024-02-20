@@ -69,7 +69,7 @@ const updateCommentLikes = asyncHandler(async (req, res) => {
 });
 
 const getAllPostComments = asyncHandler(async (req, res) => {
-    const comments = await CommentsModel.find({ postId: req.params.id }).sort({ createdAt: 1 });
+    const comments = await CommentsModel.find({ postId: req.params.id }).sort({ createdAt: -1 });
     res.status(200).json(comments);
 });
 

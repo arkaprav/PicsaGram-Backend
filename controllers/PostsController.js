@@ -83,7 +83,7 @@ const updatePostLikes = asyncHandler(async (req, res) => {
 });
 
 const getAllPosts = asyncHandler(async (req, res) => {
-    const posts = await PostsModel.find().sort({ createdAt: 1 });
+    const posts = await PostsModel.find().sort({ createdAt: -1 });
     res.status(200).json(posts);
 });
 
@@ -102,7 +102,7 @@ const getUserPosts = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("User Not Found!");
     }
-    const posts = await PostsModel.find({ createdBy: req.params.id }).sort({ createdAt: 1 }).toArray(function(err, docs) {
+    const posts = await PostsModel.find({ createdBy: req.params.id }).sort({ createdAt: -1 }).toArray(function(err, docs) {
         if (err) throw err;
     
         console.log(docs);

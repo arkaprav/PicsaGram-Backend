@@ -84,7 +84,7 @@ const Register = asyncHandler( async (req, res) => {
 });
 
 const getAllUsers = asyncHandler( async (req, res) => {
-    const users = await UserModel.find().sort({ createdAt: 1 });
+    const users = await UserModel.find().sort({ createdAt: -1 });
     res.status(200).json(users);
 });
 
