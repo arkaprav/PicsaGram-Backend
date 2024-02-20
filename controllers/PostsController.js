@@ -83,11 +83,7 @@ const updatePostLikes = asyncHandler(async (req, res) => {
 });
 
 const getAllPosts = asyncHandler(async (req, res) => {
-    const posts = await PostsModel.find().sort({ createdAt: 1 }).toArray(function(err, docs) {
-        if (err) throw err;
-    
-        console.log(docs);
-    });
+    const posts = await PostsModel.find().sort({ createdAt: 1 });
     res.status(200).json(posts);
 });
 
