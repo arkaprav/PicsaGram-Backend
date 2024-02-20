@@ -61,9 +61,21 @@ const updateCommentLikes = asyncHandler(async (req, res) => {
         throw new Error("Comment not Found");
     }
     const { likes } = comment;
-    let data = {
-        likes: JSON.stringify([...JSON.parse(likes), req.user.id ]),
-    };
+    const d = JSON.parse(likes);
+    let data;
+    if(d.includes(req.user.id)){
+        const newD = d.filter((el) => {
+            return el !== req.user.id;
+        });
+        data = {
+            likes: JSON.stringify(newD),
+        }
+    }
+    else {
+        data = {
+            likes: JSON.stringify([...d, req.user.id]),
+        }
+    }
     const updatedComment = await CommentsModel.findByIdAndUpdate(req.params.id, data);
     res.status(200).json({ message: "Post Updated" });
 });
