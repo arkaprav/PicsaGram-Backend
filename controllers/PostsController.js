@@ -102,11 +102,9 @@ const getUserPosts = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("User Not Found!");
     }
-    const posts = await PostsModel.find({ createdBy: req.params.id }).sort({ createdAt: -1 }).toArray(function(err, docs) {
-        if (err) throw err;
-    
-        console.log(docs);
-    });
+    console.log(user);
+    const posts = await PostsModel.find({ createdBy: req.params.id }).sort({ createdAt: -1 });
+    console.log(posts);
     res.status(200).json(posts);
 });
 
