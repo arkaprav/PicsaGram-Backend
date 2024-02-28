@@ -189,34 +189,5 @@ const deleteFollower = asyncHandler( async (req, res) => {
     res.status(200).json({ message: "follower deleted" });
 });
 
-const UpdateSavedPosts = asyncHandler(async (req, res) => {
-    const user = await UserModel.findById(req.user.id);
-    if(!user) {
-        res.status(404);
-        throw new Error("User Not Found");
-    }
-    const post = await PostsModel.findById(req.params.id);
-    if(!post) {
-        res.status(404);
-        throw new Error("Post Not Found");
-    }
-    const sp = JSON.parse(user.saved_posts);
-    let data;
-    if(sp.includes(req.params.id)){
-        const newD = sp.filter((p) => {
-            return p !== req.params.id;
-        });
-        data = {
-            saved_posts: JSON.stringify(newD)
-        }
-    }
-    else {
-        data = {
-            saved_posts: JSON.stringify([...sp, req.params.id])
-        }
-    }
-    const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, data);
-    res.status(200).json({ message: "User Updated"});
-})
 
-module.exports = { Login, Register, getAllUsers, getSingleUser, updateSingleUser, UpdateSavedPosts, DeleteSingleUser, updateFollower, deleteFollower, getCurrentUser };
+module.exports = { Login, Register, getAllUsers, getSingleUser, updateSingleUser, DeleteSingleUser, updateFollower, deleteFollower, getCurrentUser };

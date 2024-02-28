@@ -33,6 +33,36 @@ const createPosts = asyncHandler(async (req, res) => {
     return res.status(201).json(post);
 });
 
+const UpdateSavedPosts = asyncHandler(async (req, res) => {
+    const user = await UserModel.findById(req.user.id);
+    if(!user) {
+        res.status(404);
+        throw new Error("User Not Found");
+    }
+    const post = await PostsModel.findById(req.params.id);
+    if(!post) {
+        res.status(404);
+        throw new Error("Post Not Found");
+    }
+    const sp = JSON.parse(user.saved_posts);
+    let data;
+    if(sp.includes(req.params.id)){
+        const newD = sp.filter((p) => {
+            return p !== req.params.id;
+        });
+        data = {
+            saved_posts: JSON.stringify(newD)
+        }
+    }
+    else {
+        data = {
+            saved_posts: JSON.stringify([...sp, req.params.id])
+        }
+    }
+    const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, data);
+    res.status(200).json({ message: "User Updated"});
+})
+
 const updatePost = asyncHandler(async (req, res) => {
     const post = await PostsModel.findById(req.params.id);
     if(!post){
@@ -127,4 +157,4 @@ const deletePost = asyncHandler(async (req, res) => {
     return res.status(200).json({ message: "Post Deleted!" });
 });
 
-module.exports = { getAllPosts, getSinglePost, getUserPosts, createPosts, updatePost, updatePostLikes, deletePost }
+module.exports = { getAllPosts, getSinglePost, getUserPosts, createPosts, updatePost, UpdateSavedPosts, updatePostLikes, deletePost }
