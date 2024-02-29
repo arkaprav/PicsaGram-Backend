@@ -155,7 +155,7 @@ const updateFollower = asyncHandler( async (req, res) => {
     }
     const updatedFollowing = await UserModel.findByIdAndUpdate(req.params.id, followingData);
     const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, followerData);
-    res.status(200).json({ message: "Follower updated"});
+    return res.status(200).json({ message: "Follower updated"});
 });
 
 const deleteFollower = asyncHandler( async (req, res) => {
@@ -186,7 +186,7 @@ const deleteFollower = asyncHandler( async (req, res) => {
     }
     const updatedFollowing = await UserModel.findByIdAndUpdate(req.params.id, followingData);
     const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, followerData);
-    res.status(200).json({ message: "follower deleted" });
+    return res.status(200).json({ message: "follower deleted" });
 });
 
 
