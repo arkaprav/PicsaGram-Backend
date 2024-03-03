@@ -10,6 +10,8 @@ const UserOpenRoutes = require("./routes/UsersRoutes");
 const UserSecureRoutes = require("./routes/UserSecureRoutes");
 const PostsRoutes = require("./routes/PostsRoutes");
 const PostsSecureRoutes = require("./routes/PostsSecureRoutes");
+const ReelsRoutes = require("./routes/ReelsRoutes");
+const ReelsSecureRoutes = require("./routes/ReelsSecureRoutes");
 const CommentsRoutes = require("./routes/CommentsRoutes");
 const CommentsSecureRoutes = require("./routes/CommentsSecureRoutes");
 
@@ -36,6 +38,8 @@ app.use("/api/users/", UserOpenRoutes);
 app.use("/api/users/secure", UserSecureRoutes);
 app.use("/api/posts/", PostsRoutes);
 app.use("/api/posts/secure/", PostsSecureRoutes);
+app.use("/api/reels/", ReelsRoutes);
+app.use("/api/reels/secure/", ReelsSecureRoutes);
 app.use("/api/comments/", CommentsRoutes);
 app.use("/api/comments/secure/", CommentsSecureRoutes);
 app.use(errorHandler);
