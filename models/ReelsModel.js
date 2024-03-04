@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const ReelModel = mongoose.Schema({
     video: {
         type: String,
-        required: [true, "Image is required"]
+        required: [true, "Video is required"]
     },
     createdBy: {
         type: String,

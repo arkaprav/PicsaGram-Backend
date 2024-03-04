@@ -13,15 +13,20 @@ const createReels = asyncHandler(async (req, res) => {
     let video = "";
     if(!req.file){
         res.status(401);
-        throw new Error("Can't create a Reel without an video!");
+        throw new Error("Can't create a Reel without a video!");
     }
     else{
-        video = 'data:video/png;base64,' +  req.file.buffer.toString("base64");
+        video = 'data:video/mp4;base64,' +  req.file.buffer.toString("base64");
     }
     if(!caption){
         res.status(401);
         throw new Error("Caption is required!");
     }
+    console.log({
+        video,
+        createdBy: req.user.id,
+        caption
+    });
     const Reel = await ReelsModel.create({
         video,
         createdBy: req.user.id,
@@ -81,9 +86,7 @@ const getUserReels = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error("User Not Found!");
     }
-    console.log(user);
     const Reels = await ReelsModel.find({ createdBy: req.params.id }).sort({ createdAt: -1 });
-    console.log(Reels);
     res.status(200).json(Reels);
 });
 
